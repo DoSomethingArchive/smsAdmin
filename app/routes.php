@@ -11,6 +11,8 @@
 |
 */
 
+//Since angular.js uses {{ }} syntax, set Blade to use different syntax.
+
 Blade::setContentTags('<%', '%>'); 		// for variables and all things Blade
 Blade::setEscapedContentTags('<%%', '%%>'); 	// for escaped data
 
@@ -26,3 +28,7 @@ Route::get('sms', function() {
 Route::get('knock', function() {
 	return View::make('knock');
 });
+
+Route::post('upd', 'HomeController@updateFile');
+
+Route::get('upd', 'HomeController@updateFile');
