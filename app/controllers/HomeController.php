@@ -25,17 +25,19 @@ class HomeController extends BaseController {
 		 
 		 
 		 $destination = 'ds/lib/ds/';
-		 $destination .= 'copy' . Input::get('destination');
+		 $destination .= Input::get('destination');
 		 
 		 $file = Input::get('file');
-		 json_decode($file);
-		 return "Here";
-		 $file = json_decode($file);
-		 return "Here";
+		 // json_decode($file);
+		 // return "Here";
+		 // $file = json_decode($file);
+		 // return "Here";
 		 // return $file;
 		 // file_put_contents($destination, print_r($file, TRUE));
 		 
-		 file_put_contents($destination, json_encode ($file));
+		 
+		 
+		 file_put_contents($destination, json_encode ($file, JSON_NUMERIC_CHECK));
 		 // return "Here";
 		 return $destination;
 		 

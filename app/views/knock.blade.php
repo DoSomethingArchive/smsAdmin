@@ -4,14 +4,14 @@
 
 <script>
 	//Get the json config files and make them more manageable to reference
-	var config =  <% file_get_contents('ds/lib/ds/tips-config.json') %>;
+	var config =  <% file_get_contents('ds/lib/ds/copytips-config.json') %>;
 	var routing =  <% file_get_contents('ds/lib/ds/routing-config.json') %>;
 
 	var campaignTips = config.tips;
 	var startCampaignTransitions = routing.startCampaignTransitions;
 	var yesNoPaths = routing.yesNoPaths;
 
-	var tipsCopy = JSON.parse(JSON.stringify(campaignTips));
+	var tipsCopy = JSON.parse(angular.toJson(campaignTips));
 	var editingMode = false;
 	tipsEditMode(campaignTips);
 
@@ -168,11 +168,11 @@
 	
 	function saveFile(model) {
 		if(model.tips) {
-			var destination = 'tips-config.json';
+			var destination = 'copytips-config.json';
 			tipsDisplayMode(model.tips);
 		}
 		else {
-			var destination = 'routing-config.json';
+			var destination = 'copyrouting-config.json';
 		}
 		
 		
@@ -216,6 +216,11 @@
 		</td>
 	</tr>
 </table>
+
+<div>
+	<button onclick="saveFile(routing)">Save</button>
+</div>
+
 
 <button onclick="tipsDisplayMode(campaignTips)">
 	Display Mode
