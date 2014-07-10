@@ -4,14 +4,13 @@
 
 <script>
 	//Get the json config files and make them more manageable to reference
-	var config =  <% file_get_contents('ds/lib/ds/copytips-config.json') %>;
-	var routing =  <% file_get_contents('ds/lib/ds/routing-config.json') %>;
+	var config =     <% file_get_contents('ds/lib/ds/copytips-config.json') %>;
+	var routing =     <% file_get_contents('ds/lib/ds/copyrouting-config.json') %>;
 
 	var campaignTips = config.tips;
 	var startCampaignTransitions = routing.startCampaignTransitions;
 	var yesNoPaths = routing.yesNoPaths;
 
-	var tipsCopy = JSON.parse(angular.toJson(campaignTips));
 	var editingMode = false;
 	tipsEditMode(campaignTips);
 
@@ -26,7 +25,7 @@
 
 	app.directive("clickToEdit", function() {
 
-		var editorTemplate = '<span class="click-to-edit">' + '<span ng-hide="view.editorEnabled" ng-click="enableEditor()">' + '{{value}} ' + '</span>' + '<span ng-show="view.editorEnabled">' + '<input ng-model="view.editableValue">' + '<span ng-click="save()" class="mega-octicon octicon-check med-icon button"></span>' + '<span ng-click="disableEditor()" class="mega-octicon octicon-remove-close med-icon button cancel"></span>' + '</span>' + '</span>';
+		var editorTemplate = '<span class="click-to-edit">' + '<span ng-hide="view.editorEnabled" ng-click="enableEditor()">' + '{{value}} ' + '</span>' + '<span ng-show="view.editorEnabled">' + '<input ng-model="view.editableValue">' + '<span ng-click="save()" class="mega-octicon octicon-check med-icon button fade"></span>' + '<span ng-click="disableEditor()" class="mega-octicon octicon-remove-close med-icon button cancel fade"></span>' + '</span>' + '</span>';
 
 		return {
 			restrict : "A",
@@ -34,6 +33,7 @@
 			template : editorTemplate,
 			scope : {
 				value : "=clickToEdit",
+				index : '='
 			},
 			controller : function($scope) {
 				$scope.view = {
@@ -43,15 +43,16 @@
 
 				$scope.enableEditor = function() {
 					tipsEditMode(campaignTips);
+					//Transform tips arrays into arrays of objects so that angular can update them properly
 					$scope.view.editorEnabled = true;
 					$scope.view.editableValue = $scope.value;
 				};
 
-				$scope.disableEditor = function() {
+				$scope.disableEditor = function() {//Close editor without saving changes
 					$scope.view.editorEnabled = false;
 				};
 
-				$scope.save = function() {
+				$scope.save = function() {//Save changes if input can be parsed as a number
 					var val = parseInt($scope.view.editableValue);
 					if (isNaN(val)) {
 						alert('Code should be a number');
@@ -59,6 +60,13 @@
 					}
 					$scope.value = val;
 					$scope.disableEditor();
+				};
+
+				$scope.remove = function(id) {
+					console.log(id);
+					console.log($scope.$index);
+					// $scope.$delete
+
 				};
 
 			}
@@ -79,56 +87,90 @@
 			controller : function($scope) {
 
 				$scope.add = function() {
-					
-					
-					var obj = $scope.value;		
-					if(obj.optins) {			//Check if the object is the array type
+
+					var obj = $scope.value;
+					if (obj.optins) {//Check if the object is the array type used by tips
 						var arr = obj.optins;
 						var index = Object.keys(arr).length;
 						console.log(index);
-						arr[index] = { str : 0};
-					}
-					else {
+						// console.log(index);
+						arr[index] = {
+							str : 0
+						};
+					} else {//object is a real object
 						var keyname = prompt("What should the property name be?");
-						if(!keyname) return;
+						if (!keyname)
+							return;
 						obj[keyname] = 0;
 					}
 
-
-					
 				}
 			}
 		};
 	});
 
-	app.controller("tipsControl", function($scope) {
+	app.directive("removestuff", function() {
+		return {
+			restrict : "E",
+			replace : true,
+			template : '<span class="octicon octicon-trashcan button fade" ng-click="remove($index)"></span>',
+			controller : function($scope) {
+				$scope.remove = function(index) {
+					
+					var arr = $scope.$parent.tip.optins;
 
-		$scope.codes = campaignTips;
+					console.log(arr);
+	
+					delete arr[index];
 
+					console.log(arr);
+					arr = reIndex(arr);
+
+				};
+			}
+		};
 	});
 
-	app.controller("tipsControlTwo", function($scope) {
-
-		$scope.codes = campaignTips;
-
+	
+	app.controller("MainCtrl", function($scope) {
+		$scope.startCampaignTransitions = startCampaignTransitions;
+		$scope.yesNoPaths = yesNoPaths;
+		
+		$scope.campaignTips = campaignTips;
+		
+		$scope.notSorted = function(obj) {
+			if (!obj) {
+				return [];
+			}
+			return Object.keys(obj);
+		}
+		
 	});
+	
 
-	app.controller("transitionsControl", function($scope) {
-		$scope.codes = startCampaignTransitions;
-	});
-
-	app.controller("yesNoControl", function($scope) {
-		$scope.codes = yesNoPaths;
-	});
 
 	angular.element(document).ready(function() {
 		angular.bootstrap(document, ["codeModel"]);
 	});
 
+	function reIndex(arr, orig) {
+		
+		newArr = Array();
+		obj = Object();
+		$.each(arr, function(i, v) {
+			newArr.push(v);
+
+		});
+		$.each(newArr, function(i, v) {
+			obj[i] = v;
+		});
+		return obj;
+	}
+
 	function tipsEditMode(tips) {
 		if (editingMode)
 			return;
-		
+
 		editingMode = true;
 		$.each(tips, function(i, v) {
 			var bigObj = new Object();
@@ -142,7 +184,7 @@
 			v.optins = bigObj;
 
 		});
-		console.log(tips);
+		// console.log(tips);
 	}
 
 	function tipsDisplayMode(tips) {
@@ -163,87 +205,91 @@
 			v.optins = arr;
 
 		});
-		console.log(tips);
+		// console.log(tips);
 	}
-	
+
 	function saveFile(model) {
-		if(model.tips) {
+		if (model.tips) {
 			var destination = 'copytips-config.json';
 			tipsDisplayMode(model.tips);
-		}
-		else {
+		} else {
 			var destination = 'copyrouting-config.json';
 		}
-		
-		
+
 		$.post('upd', {
 			destination : destination,
 			file : model
 		}, function(data) {
 			console.log(data);
 		});
-		
 	}
 
 </script>
 
-<table ng-controller="yesNoControl">
+<table ng-controller="MainCtrl">
 	<tr >
-		<th ng-repeat="tip in codes"> {{tip.__comments}} </th>
+		<th ng-repeat="tip in yesNoPaths"> {{tip.__comments}} </th>
 	</tr>
 	<tr >
-		<td ng-repeat="tip in codes">
+		<td ng-repeat="tip in yesNoPaths">
 		<div ng-repeat="(key, code) in tip" ng-hide="$first">
 			<strong>{{ key }}</strong>:
 			<input type="text" ng-model="code" class="write" />
 			<span class="button" click-to-edit="code"></span>
-		</div></td>
+		</div><span class="mega-octicon octicon-plus med-icon button addButton" add-new-item="tip"></span></td>
 	</tr>
 </table>
+<div>
+	<button onclick="saveFile(routing)">
+		Save
+	</button>
+</div>
 
-<table ng-controller="transitionsControl">
+<table ng-controller="MainCtrl">
 	<tr >
-		<th ng-repeat="tip in codes"> {{tip.__comments}} </th>
+		<th ng-repeat="tip in startCampaignTransitions"> {{tip.__comments}} </th>
 	</tr>
 	<tr >
-		<td ng-repeat="tip in codes">
+		<td ng-repeat="tip in startCampaignTransitions">
 		<div ng-repeat="(key, code) in tip" ng-hide="$first">
 			<strong>{{ key }}</strong>:
 			<input type="text" ng-model="code" class="write" />
 			<span class="button" click-to-edit="code"></span>
-		</div>
-		<span class="mega-octicon octicon-plus med-icon button addButton" add-new-item="tip"></span>
-		</td>
+		</div><span class="mega-octicon octicon-plus med-icon button addButton" add-new-item="tip"></span></td>
 	</tr>
 </table>
 
 <div>
-	<button onclick="saveFile(routing)">Save</button>
+	<button onclick="saveFile(routing)">
+		Save
+	</button>
 </div>
-
 
 <button onclick="tipsDisplayMode(campaignTips)">
 	Display Mode
 </button>
 
-<table ng-controller="tipsControlTwo">
+<!-- <table ng-controller="MainCtrl">
 
 	<tr >
-		<th ng-repeat="tip in codes"> {{tip.__comments}} </th>
+		<th ng-repeat="tip in campaignTips"> {{tip.__comments}} </th>
 	</tr>
 	<tr >
-		<td ng-repeat="tip in codes">
-		<div ng-repeat="code in tip.optins">
+		<td ng-repeat="tip in campaignTips">
+		<div ng-repeat="key in notSorted(tip.optins)" ng-init="code = tip.optins[key]">
+			
+			<removestuff></removestuff>	
+
 			<input class="write" ng-model="code" />
 			<span class="button" click-to-edit="code.str"></span>
-		</div>
-		<span class="mega-octicon octicon-plus med-icon button addButton" add-new-item="tip"></span>
-		</td>
+		</div><span class="mega-octicon octicon-plus med-icon button addButton fade" add-new-item="tip"></span></td>
 	</tr>
-</table>
+</table> -->
 
 <div>
-	<button onclick="saveFile(config)">Save</button>
+	<button onclick="saveFile(config)">
+		Save
+	</button>
 </div>
 
 <!-- <table ng-controller="tipsControlTwo">
@@ -264,9 +310,10 @@
 </tr>
 </table> -->
 
-<div ng-controller="tipsControlTwo">
+<div ng-controller="MainCtrl">
 	<code>
-		{{codes | json}}</code>
+		{{ startCampaignTransitions | json}}
+	</code>
 </div>
 
 @stop

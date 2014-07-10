@@ -8,6 +8,7 @@
 		
 		<script src="includes/jquery.js"></script>
 		<script src="includes/angular.min.js"></script>
+		<script src="includes/angular-sanitize.js"></script>
 		<!-- <script src="includes/knockout.js"></script> -->
 		
 		
@@ -63,15 +64,30 @@
 				padding-left: 15%;
 			}
 			
-			.octicon-check {
+			.octicon-check, .octicon-remove-close {
+				color: #dddddd;
+			}
+			
+			.octicon-check:hover {
 				color : #9EBF6D;
 			}
-			.octicon-remove-close {
+			.octicon-remove-close:hover {
 				color : #B11623;
 			}
-			.octicon-plus {
+			.octicon-plus, .octicon-trashcan {
 				color: #dddddd;
+				
+			}
+			.octicon-plus:hover, .octicon-trashcan:hover {
+				color: #333333;
 			}		
+			
+			.fade {
+				-o-transition: .5s;
+				-webkit-transition: .5s;
+				-moz-transition: .5s;
+				transition: .5s;
+			}
 			
 			.med-icon {
 				font: normal normal 28px octicons;
@@ -80,6 +96,14 @@
 			.button {
 				cursor:pointer;
 			}
+			
+			pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+			.string { color: green; }
+			.number { color: darkorange; }
+			.boolean { color: blue; }
+			.null { color: magenta; }
+			.key { color: red; }
+
 			
 		</style>
 		

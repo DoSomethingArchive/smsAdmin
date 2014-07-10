@@ -31,4 +31,4 @@ Route::get('knock', function() {
 
 Route::post('upd', 'HomeController@updateFile');
 
-Route::get('upd', 'HomeController@updateFile');
+
