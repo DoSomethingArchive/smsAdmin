@@ -9,10 +9,13 @@
 		<script src="includes/jquery.js"></script>
 		<script src="includes/angular.min.js"></script>
 		<script src="includes/angular-sanitize.js"></script>
+		<script type="text/javascript" src="http://angular-ui.github.com/ng-grid/lib/ng-grid.debug.js"></script>
+		<!-- <script src="includes/ng-grid-2.0.11.min.js"></script> -->
 		<!-- <script src="includes/knockout.js"></script> -->
 		
 		
 		<link rel="stylesheet" href="octicons/octicons.css" />
+		<link rel="stylesheet" href="includes/ng-grid.min.css" />
 		
 		<style>
 			html {
@@ -103,6 +106,12 @@
 			.boolean { color: blue; }
 			.null { color: magenta; }
 			.key { color: red; }
+			
+			.gridStyle {
+			    border: 1px solid rgb(212,212,212);
+			    width: 400px; 
+			    height: 300px
+			}
 
 			
 		</style>

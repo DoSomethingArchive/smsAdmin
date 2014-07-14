@@ -21,28 +21,20 @@ class HomeController extends BaseController {
 	}
 	
 	public function updateFile() {
-		 // return dd(Input::get());
+		
 		 
 		 
 		 $destination = 'ds/lib/ds/';
 		 $destination .= Input::get('destination');
 		 
 		 $file = Input::get('file');
-		 // json_decode($file);
-		 // return "Here";
-		 // $file = json_decode($file);
-		 // return "Here";
-		 // return $file;
-		 // file_put_contents($destination, print_r($file, TRUE));
-		 
-		 
 		 
 		 file_put_contents($destination, json_encode ($file, JSON_NUMERIC_CHECK));
-		 // return "Here";
+		 
 		 return $destination;
 		 
 		 
-		 // return View::make('hello');
+		 
 	}
 
 }
