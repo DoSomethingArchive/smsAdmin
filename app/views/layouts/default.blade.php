@@ -3,19 +3,19 @@
 	<head>
 		<title></title>	
 		
-		<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-		<script src="//ajax.aspnetcdn.com/ajax/knockout/knockout-3.0.0.js"></script> -->
-		
-		<script src="includes/jquery.js"></script>
-		<script src="includes/angular.min.js"></script>
-		<script src="includes/angular-sanitize.js"></script>
-		<script type="text/javascript" src="http://angular-ui.github.com/ng-grid/lib/ng-grid.debug.js"></script>
-		<!-- <script src="includes/ng-grid-2.0.11.min.js"></script> -->
-		<!-- <script src="includes/knockout.js"></script> -->
-		
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
+		<!-- <script src="//ajax.aspnetcdn.com/ajax/knockout/knockout-3.0.0.js"></script> -->
 		
 		<link rel="stylesheet" href="octicons/octicons.css" />
-		<link rel="stylesheet" href="includes/ng-grid.min.css" />
+		<!-- <script src="includes/jquery.js"></script> -->
+		<!-- <script src="includes/angular.min.js"></script> -->
+		<!-- <script src="includes/angular-sanitize.js"></script> -->
+		
+		
+		
+		
+		
 		
 		<style>
 			html {
