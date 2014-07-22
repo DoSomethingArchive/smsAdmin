@@ -216,7 +216,7 @@
 	});
 
 	app.directive("addNewModule", function() {
-		var addTemplate = '<button ng-click="add()">Hi</button>';
+		var addTemplate = '<button class="btn" ng-click="add()">New Campaign</button>';
 		
 		return {
 			restrict : "A",
@@ -227,9 +227,17 @@
 			},
 			controller : function($scope) {
 				$scope.add = function() {
+					var obj = prompt('What is the mdata for the new campaign?');
+					if(!obj) return;
 					var a = $scope.$parent.campaignTips;
+					a[obj] = {
+						"__comments" : "New comments",
+						optins : [],
+						left: 0,
+						top: 0
+						
+					};
 					
-					console.log(a);
 				}
 			}
 		} 	
