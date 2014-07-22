@@ -138,11 +138,13 @@
 			controller : function($scope) {
 
 				$scope.add = function() {
-
+					
 					var obj = $scope.value;
 					if (obj.optins) {							//Check if the object is the array type used by tips
 						var arr = obj.optins;
+						// console.log(arr.length);
 						arr[arr.length] = 0;
+						
 					} else {//object is a real object
 						var keyname = prompt("What should the property name be?");
 						if (!keyname)	//User didn't input a property name so cancel operation
@@ -242,11 +244,12 @@
 				element.draggable({
 					cursor: "move",
 					stop: function (event, ui) {
-						scope[attrs.xpos] = ui.position.left;
-	          			scope[attrs.ypos] = ui.position.top;
-	          			scope.$apply();
-	          			console.log(scope[attrs.xpos]);
-	          			console.log(scope);
+						
+						scope.$apply(function(){
+	                        scope.xpos =  ui.position.left;
+	                        scope.ypos =  ui.position.top;
+                    	});
+						
 					}
 				});
 			}
@@ -278,7 +281,9 @@
 		$scope.setPositions = function(){
 			
 			angular.forEach($scope.campaignTips, function(i,v) {
-				console.log(i);
+				i.top = 0; 					
+				i.left = 0;
+				
 			});
 			
 			// console.log($scope.campaignTips);
@@ -300,7 +305,7 @@
 
 	angular.element(document).ready(function() {
 		angular.bootstrap('main', ["codeModel"]);
-		// setDraggable();
+		setDraggable();
 	});
 
 
@@ -319,20 +324,15 @@
 		});
 	}
 	
+	/**
+	 * Use JQuery to keep track of the stacking and containment
+	 */
+	
 	function setDraggable() {
 		$('.modules').draggable({
 			containment: 'parent',
 			stack : ".modules",
-			stop: function (event, ui) {
-			   scope[attrs.xpos] = ui.position.left;
-			   scope[attrs.ypos] = ui.position.top;
-			   scope.$apply();
-			}
 		});
-		
-		function setPositions() {
-			
-		}
 		
 	}
 
@@ -340,13 +340,20 @@
 
 <main>
 
+
+
+
 <div ng-controller="MainCtrl" id="moduleHolder">
+
+<ul ng-repeat="(key, tip) in campaignTips" >
+	<!-- <li ng-repeat="key in tip.optins" ng-init="code = tip.optins[key]"> {{ key }} </li> -->
+</ul>
 	
 	<div>
 		<button ng-click="setPositions()">Pos</button>
 	</div>
 
-<table ng-repeat="(key, tip) in campaignTips | orderBy:'key.sort'" class="modules" draggable ng-style="{left: tip.positions.left, top: tip.positions.top}" xpos="tip.positions.left" ypos="tip.positions.top" >
+<table ng-repeat="(key, tip) in campaignTips | orderBy:'key.sort'" class="modules" draggable ng-style="{left: tip.left, top: tip.top}" xpos="tip.left" ypos="tip.top" >
 	
 	<tr >
 		<th> <span class="button" edit-name="tip.__comments" key="key"></span>
@@ -354,13 +361,10 @@
 	</tr>
 	<tr >
 		<td>
-			<div>
-				<input ng-model="tip.positions.left" />
-			</div>
-		<div ng-repeat="key in notSorted(tip.optins)" ng-init="code = tip.optins[key]">
+		<div ng-repeat="key in tip.optins track by $index" ng-init="code = tip.optins[key]">
 
-			<input class="write" ng-model="code" />
-			<span class="button" click-to-edit="code" index="{{$index}}"></span>
+			<input class="write" ng-model="key" />
+			<span class="button" click-to-edit="key" index="{{$index}}"></span>
 		</div><span class="mega-octicon octicon-plus med-icon button addButton fade" add-new-item="tip"></span>
 		<br />
 		<div class="autoMargin">
