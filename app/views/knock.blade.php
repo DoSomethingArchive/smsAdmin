@@ -297,28 +297,6 @@
 		
 	});
 	
-	// app.filter('orderObjectBy', function() {
-	  // return function(items, field, reverse) {
-	    // var filtered = [];
-	    // angular.forEach(items, function(item) {
-	      // filtered.push(item);
-	    // });
-	    // filtered.sort(function (a, b) {
-	      // return (a[field] > b[field] ? 1 : -1);
-	    // });
-	    // if(reverse) filtered.reverse();
-	    // console.log("here");
-	    // return filtered;
-	  // };
-	// });
-	
-	app.filter('orderByUnicornHeight', function() {
-  return function(obj) {
-    
-    return [1,2,3];
-}});
-
-
 
 	angular.element(document).ready(function() {
 		angular.bootstrap('main', ["codeModel"]);
@@ -368,7 +346,7 @@
 		<button ng-click="setPositions()">Pos</button>
 	</div>
 
-<table ng-repeat="(key, tip) in campaignTips | orderBy:'key.sort'" class="modules" draggable  >
+<table ng-repeat="(key, tip) in campaignTips | orderBy:'key.sort'" class="modules" draggable ng-style="{left: tip.positions.left, top: tip.positions.top}" xpos="tip.positions.left" ypos="tip.positions.top" >
 	
 	<tr >
 		<th> <span class="button" edit-name="tip.__comments" key="key"></span>
@@ -376,6 +354,9 @@
 	</tr>
 	<tr >
 		<td>
+			<div>
+				<input ng-model="tip.positions.left" />
+			</div>
 		<div ng-repeat="key in notSorted(tip.optins)" ng-init="code = tip.optins[key]">
 
 			<input class="write" ng-model="code" />
