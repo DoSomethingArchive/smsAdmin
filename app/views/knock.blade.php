@@ -11,7 +11,8 @@
 	var campaignTips = config.tips;
 	var startCampaignTransitions = routing.startCampaignTransitions;
 	var yesNoPaths = routing.yesNoPaths;
-
+	
+	var origin = JSON.parse(JSON.stringify(config));
 
 	app = angular.module("codeModel", ['ngAnimate']);
 	
@@ -49,7 +50,7 @@
 									'<span ng-click="saveCode(index)" class="mega-octicon octicon-check med-icon button fade"></span>' + 
 									'<span ng-click="disableEditor()" class="mega-octicon octicon-remove-close med-icon button cancel fade"></span>' + 
 								'</span>' +
-								'<span class="octicon octicon-trashcan button fade right" ng-click="remove(index)"></span>'
+								'<span class="octicon octicon-trashcan button fade right" ng-click="remove(index)"></span>' +
 							'</span>';
 
 		return {
@@ -194,11 +195,12 @@
 				
 				$scope.mdataPrompt = function() {
 					// console.log($scope);
-					console.log($scope.$parent.$parent.campaignTips);
+					// console.log($scope.$parent.$parent.campaignTips);
 					var val = $scope.key;
 					// console.log($scope.$parent);
 					var mdata = prompt('What would you like to change the mdata to?', val);
-					if(!mdata) return;
+					if(!mdata || $scope.$parent.$parent.campaignTips[mdata]) return;
+					else if(mdata === val) return;
 					// $scope.$parent.$parent.campaignTips.replace(val, mdata);
 					$scope.$parent.$parent.campaignTips[mdata] = $scope.$parent.$parent.campaignTips[val];
 					delete $scope.$parent.$parent.campaignTips[val];
@@ -225,22 +227,46 @@
 			scope : {
 				value : "=addNewModule"
 			},
-			controller : function($scope) {
+			controller : function($scope, $timeout) {
 				$scope.add = function() {
 					var obj = prompt('What is the mdata for the new campaign?');
-					if(!obj) return;
+					console.log($scope.$parent.campaignTips[obj]);
+					if(!obj || $scope.$parent.campaignTips[obj] !== undefined) return;
 					var a = $scope.$parent.campaignTips;
 					a[obj] = {
-						"__comments" : "New comments",
+						"__comments" : "New title",
 						optins : [],
 						left: 0,
 						top: 0
 						
 					};
-					
+					$timeout(function() {
+						setDraggable();
+					}, 100);
 				}
 			}
 		} 	
+	});
+	
+	app.directive("removeModule", function() {
+		var template = '<span class="octicon octicon-trashcan button fade right" ng-click="remove(key)"></span>';
+		
+		return {
+			restrict : "A",
+			replace : true,
+			template : template,
+			scope : {
+				value : "=removeModule",
+				key : '='
+			},
+			controller : function($scope) {
+				$scope.remove = function(id) {
+					var check = confirm("Are you sure you want to delete this campaign?");
+					if(check) delete $scope.$parent.campaignTips[id];
+				}
+			}
+		}
+		
 	});
 	
 	
@@ -318,6 +344,8 @@
 
 
 	function saveFile(model) {
+		// compare(origin, model);
+		// return;
 		if (model.tips) {
 			var destination = 'tips-config.json';
 		} else {
@@ -331,6 +359,15 @@
 			console.log(data);
 		});
 	}
+	
+	// function compare(original, updated) {
+		// angular.forEach(original, function(i,v) {
+			// console.log(i + ', ' + v);
+		// });
+// 		
+		// // console.log(original);
+		// // console.log(updated);
+	// }
 	
 	/**
 	 * Use JQuery to keep track of the stacking and containment
@@ -352,10 +389,6 @@
 
 
 <div ng-controller="MainCtrl" id="moduleHolder">
-
-<ul ng-repeat="(key, tip) in campaignTips" >
-	<!-- <li ng-repeat="key in tip.optins" ng-init="code = tip.optins[key]"> {{ key }} </li> -->
-</ul>
 	
 	<div>
 		<button ng-click="setPositions()">Pos</button>
@@ -364,7 +397,7 @@
 <table ng-repeat="(key, tip) in campaignTips | orderBy:'key.sort'" class="modules" draggable ng-style="{left: tip.left, top: tip.top}" xpos="tip.left" ypos="tip.top" >
 	
 	<tr >
-		<th> <span class="button" edit-name="tip.__comments" key="key"></span>
+		<th> <span class="button" edit-name="tip.__comments" key="key"></span> <span key="key" remove-module="removeModule">hi</span>
 		</th>
 	</tr>
 	<tr >
@@ -385,7 +418,7 @@
 </table>
 
 <div style="clear: both;">
-	<button add-new-module="Hi">Hi</button>
+	<button add-new-module=""></button>
 </div>
 
 <div style="clear: both;">

@@ -28,6 +28,14 @@
 				
 			}
 			
+			header {
+				color: white;
+				text-align:center;
+				padding: 2%;
+				font-size: 150%;
+				background: #4e2b63;
+				background-image: linear-gradient(rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.5) 70%, rgba(0, 0, 0, 0.85) 100%);
+			}
 
 			table {
 				/*border: 1px solid black;*/
@@ -90,6 +98,7 @@
 			.octicon-plus:hover, .octicon-trashcan:hover {
 				color: #333333;
 			}
+			
 
 			.fade {
 				-o-transition: .5s;
@@ -130,6 +139,7 @@
 				
 				border-bottom: solid 2px #EEE;
 				border-right: solid 1px #EEE;
+				cursor: move;
 				
 			}
 			
@@ -162,6 +172,11 @@
 
 	</head>
 	<body>
+		
+		<header>
+			SMS Admin
+		</header>
+		
 		@yield('content')
 	</body>
 </html>
