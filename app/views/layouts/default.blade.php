@@ -7,11 +7,15 @@
 		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular-animate.js"></script>
+		<script src="includes/index.js" type="text/javascript"></script>
+		
+		<!-- <script src="requirements/json_compare.js" type="text/javascript"></script> -->
+		<!-- <script src="requirements/diff.js" type="text/javascript"></script> -->
 		<!-- <script src="//ajax.aspnetcdn.com/ajax/knockout/knockout-3.0.0.js"></script> -->
 
 		<link rel="stylesheet" href="octicons/octicons.css" />
-		<link rel="stylesheet" href="includes/neue.css" />
-		<link rel="stylesheet" href="includes/Proxima Nova/ProximaNova-Reg.otf" />
+		<link rel="stylesheet" href="requirements/neue.css" />
+		<link rel="stylesheet" href="requirements/Proxima Nova/ProximaNova-Reg.otf" />
 		<!-- <script src="includes/jquery.js"></script> -->
 		<!-- <script src="includes/angular.min.js"></script> -->
 		<!-- <script src="includes/angular-sanitize.js"></script> -->
@@ -166,6 +170,17 @@
 				font-size: 14px;
 				font-weight: normal;
 			}
+			
+			.changed {
+				background-color: #fcff7f;
+			}
+			.added {
+				background-color: #8bff7f;
+			}
+			.removed {
+				background-color: #fd7f7f;
+			}
+
 			
 
 		</style>

@@ -12,3 +12,4 @@ composer.json
 composer.lock
 phpunit.xml
 bootstrap
+public/requirements
