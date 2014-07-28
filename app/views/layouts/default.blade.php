@@ -149,6 +149,7 @@
 			
 			.modules:active {
 				background-color: #f1f1f1;
+				opacity: .8;
 				/*box-shadow: 3px 3px rgba(0,0,0,.4);*/
 				
 			}
@@ -171,14 +172,9 @@
 				font-weight: normal;
 			}
 			
-			.changed {
-				background-color: #fcff7f;
-			}
-			.added {
-				background-color: #8bff7f;
-			}
-			.removed {
-				background-color: #fd7f7f;
+			.sectionHeader {
+				background: black;
+				text-align: center;
 			}
 
 			

@@ -1,7 +1,7 @@
 	app = angular.module("codeModel", ['ngAnimate']);
 	
 		app.directive("updateDb", function() {
-		var updateTemplate = '<button ng-click="update()" ng-show="$parent.edited" class="btn size">Update Database</button>';
+		var updateTemplate = '<button ng-click="update()" ng-show="$parent.edited" class="btn size updateButton">Update Database</button>';
 		return {
 			restrict : "A",
 			replace : true,
@@ -17,7 +17,7 @@
 					console.log($scope.$parent);
 					// console.log($scope);
 					saveFile(config);
-					$scope.$parent.edited = false;
+					$scope.$parent.$parent.edited = false;
 					
 					
 				};
@@ -46,7 +46,7 @@
 				index : '@'
 			},
 			controller : function($scope) {
-				$scope.$parent.edited = false;
+				$scope.$parent.$parent.edited = false;
 				
 				$scope.view = {
 					editableValue : $scope.value,
@@ -64,8 +64,8 @@
 				
 				
 				var tip = $scope.$parent.$parent.tip;
-				var loc = tip.__commments;
 				var ctrl = $scope.$parent;
+				var a = tip.__comments;
 				
 				
 				$scope.saveCode = function(index) {//Save changes if input can be parsed as a number
@@ -83,17 +83,20 @@
 																		//than to rise up 2 levels and manually drop into the appropriate collection
 																		
 						if(tip.optins[index] === val) return; //Value didn't change so no need to show button 
-						ctrl.addChange(loc, "changed " + tip.optins[index] + " to " + val);
+						ctrl.addChange(tip.__comments, "changed " + tip.optins[index] + " to " + val);
 						tip.optins[index] = val;
 
 					} else {
 						
 						if(tip[index] === val) return; //Value didn't change so no need to show button
-						ctrl.addChange(loc, "changed " + tip[index] + " to " + val);
+						ctrl.addChange(tip.__comments, "changed " + tip[index] + " to " + val);
 						tip[index] = val;
 					}
-
-					$scope.$parent.$parent.edited = true;
+					
+					$scope.$parent.$parent.$parent.edited = true;
+					
+					// console.log($scope.$parent.$parent);
+					// console.log($scope.$parent.$parent.$parent);
 					
 				};
 				
@@ -146,7 +149,7 @@
 							return;
 						obj[keyname] = 0;
 					}
-					$scope.$parent.edited = true;
+					$scope.$parent.$parent.edited = true;
 
 				};
 			}
@@ -347,8 +350,8 @@
 
 	function saveFile(model) {
 		// startCompare(origin, model);
-		console.log($.diff(origin, model));
-		return;
+		// console.log($.diff(origin, model));
+		// return;
 		// compare(origin, model);
 		// return;
 		if (model.tips) {
