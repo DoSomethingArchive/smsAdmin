@@ -25,8 +25,8 @@ Route::get('sms', function() {
 	return View::make('sms');
 });
 
-Route::get('knock', function() {
-	return View::make('knock');
+Route::get('sms-tool', function() {
+	return View::make('sms-tool');
 });
 
 Route::post('upd', 'HomeController@updateFile');
