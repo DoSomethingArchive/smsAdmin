@@ -25,11 +25,15 @@
 
 <div ng-controller="MainCtrl" id="moduleHolder">
 	
-	<div>
-		<button ng-click="setPositions()">Pos</button>
+	<div class="center">
+		<!-- <button ng-show="edited" onclick="saveFile(config)" class="btn">Save</button> -->
+		<button class="btn" ng-click="setPositions()">Reposition</button>
+		<button ng-show="edited" ng-click="save(config)" class="btn">Save</button>
 	</div>
+	
+	
 
-<table ng-repeat="(key, tip) in campaignTips | orderBy:'key.sort'" class="modules" draggable ng-style="{left: tip.left, top: tip.top}" xpos="tip.left" ypos="tip.top" >
+<table ng-repeat="(key, tip) in campaignTips" class="modules" draggable ng-style="{left: tip.left, top: tip.top}" xpos="tip.left" ypos="tip.top" >
 	
 	<tr >
 		<th> <span class="button" edit-name="tip.__comments" key="key"></span> <span key="key" remove-module="removeModule">hi</span>
@@ -45,7 +49,7 @@
 		<br />
 		<div class="autoMargin">
 			<!-- <button onclick="saveFile(config)" class="hide">Update Database</button> -->
-			<span update-db="update"></span>
+			<!-- <span update-db="update"></span> -->
 			
 		</div>
 		</td>
@@ -65,10 +69,6 @@
 <div id="results">
 	
 </div>
-
-<code>
-		{{ campaignTips | json}}
-	</code>
 
 </div>
 
@@ -113,14 +113,6 @@
 		Save
 	</button>
 </div>
-
-
-<div ng-controller="MainCtrl"> 
-	<div ng-repeat="person in test | filter:orderByUnicornHeight:'sort':false">
-		{{ person }}
-	</div>
-</div>
-
 
 
 </main>

@@ -15,21 +15,27 @@ class HomeController extends BaseController {
 	|
 	*/
 
-	public function showWelcome()
-	{
-		return View::make('hello');
-	}
+	// public function showWelcome()
+	// {
+		// return View::make('hello');
+	// }
 	
 	public function updateFile() {
 		
-		 
+		 date_default_timezone_set("America/New_York");
 		 
 		 $destination = 'ds/lib/ds/';
-		 $destination .= Input::get('destination');
 		 
+		 $filedestination = $destination . Input::get('destination');
+		 $logdestination = $destination . "updates.log";
+		 $log = Input::get('log');
 		 $file = Input::get('file');
 		 
-		 file_put_contents($destination, json_encode ($file, JSON_NUMERIC_CHECK));
+		 $log = "\nOn " . date("F d, Y, g:i A") . "\n" . $log;
+		 
+		 
+		 file_put_contents($filedestination, json_encode ($file, JSON_NUMERIC_CHECK));
+		 file_put_contents($logdestination, $log, FILE_APPEND);
 		 
 		 return $destination;
 		 

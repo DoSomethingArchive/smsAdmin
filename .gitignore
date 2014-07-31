@@ -11,3 +11,5 @@ composer.json
 composer.lock
 phpunit.xml
 bootstrap
+app/views/calendar.blade.php
+app/views/sms.blade.php

@@ -1,30 +1,5 @@
 	app = angular.module("codeModel", ['ngAnimate']);
 	
-		app.directive("updateDb", function() {
-		var updateTemplate = '<button ng-click="update()" ng-show="$parent.edited" class="btn size updateButton">Update Database</button>';
-		return {
-			restrict : "A",
-			replace : true,
-			template : updateTemplate,
-			scope : {
-				value : "=updateDb"
-			},
-			controller : function($scope) {
-				$scope.view = {
-					changed : $scope.$parent
-				};
-				$scope.update = function() {
-					console.log($scope.$parent);
-					// console.log($scope);
-					saveFile(config);
-					$scope.$parent.$parent.edited = false;
-					
-					
-				};
-			}
-		}; 	
-		
-	});	
 
 	app.directive("clickToEdit", function() {
 
@@ -46,7 +21,7 @@
 				index : '@'
 			},
 			controller : function($scope) {
-				$scope.$parent.$parent.edited = false;
+				// $scope.$parent.$parent.$parent.edited = false;
 				
 				$scope.view = {
 					editableValue : $scope.value,
@@ -63,7 +38,8 @@
 				};
 				
 				
-				var tip = $scope.$parent.$parent.tip;
+				var tip = $scope.$parent.$parent.tip;					//I couldn't figure out a better way to access the collection that the scope is in
+																		//than to rise up 2 levels and manually drop into the appropriate collection
 				var ctrl = $scope.$parent;
 				var a = tip.__comments;
 				
@@ -79,17 +55,16 @@
 					$scope.disableEditor();
 					
 					
-					if (tip.optins) {			//I couldn't figure out a better way to access the collection that the scope is in
-																		//than to rise up 2 levels and manually drop into the appropriate collection
-																		
+					if (tip.optins) {			
+						// console.log($scope.$parent.$parent.key);										
 						if(tip.optins[index] === val) return; //Value didn't change so no need to show button 
-						ctrl.addChange(tip.__comments, "changed " + tip.optins[index] + " to " + val);
+						ctrl.addChange(tip.__comments, $scope.$parent.$parent.key,  "changed " + tip.optins[index] + " to " + val);
 						tip.optins[index] = val;
 
 					} else {
-						
+						console.log($scope.$parent.$parent);
 						if(tip[index] === val) return; //Value didn't change so no need to show button
-						ctrl.addChange(tip.__comments, "changed " + tip[index] + " to " + val);
+						ctrl.addChange(tip.__comments, $scope.$parent.$parent.key,  "changed " + tip[index] + " to " + val);
 						tip[index] = val;
 					}
 					
@@ -112,8 +87,9 @@
 						del = index + ": " + tip[index];
 						delete tip[index];
 					}
-					ctrl.addChange(tip.__comments, "deleted " + del);
-					$scope.$parent.$parent.edited = true;
+					// console.log($scope.$parent.$parent);
+					ctrl.addChange(tip.__comments, ctrl.$parent.key,  "deleted " + del);
+					$scope.$parent.$parent.$parent.edited = true;
 
 
 				};
@@ -137,23 +113,68 @@
 
 				$scope.add = function() {
 					
+					
+					
+					var added;
+					var ctrl = $scope.$parent;
+					var tip = $scope.$parent.tip;
+					// console.log($scope.$parent.$parent);
 					var obj = $scope.value;
 					if (obj.optins) {							//Check if the object is the array type used by tips
 						var arr = obj.optins;
 						// console.log(arr.length);
 						arr[arr.length] = 0;
+						added = "added 0";
 						
 					} else {//object is a real object
 						var keyname = prompt("What should the property name be?");
 						if (!keyname)	//User didn't input a property name so cancel operation
 							return;
 						obj[keyname] = 0;
+						added = "added " + keyname + " = 0";
 					}
+					ctrl.addChange(tip.__comments, ctrl.key,  added);
+					// console.log($scope.$parent);
 					$scope.$parent.$parent.edited = true;
 
 				};
 			}
 		};
+	});
+	
+	
+
+	app.directive("addNewModule", function() {
+		var addTemplate = '<button class="btn" ng-click="add()">New Campaign</button>';
+		
+		return {
+			restrict : "A",
+			replace : true,
+			template : addTemplate,
+			scope : {
+				value : "=addNewModule"
+			},
+			controller : function($scope, $timeout) {
+				$scope.add = function() {
+					var obj = prompt('What is the mdata for the new campaign?');
+					if(!obj || $scope.$parent.campaignTips[obj] !== undefined) return;
+					var a = $scope.$parent.campaignTips;
+					var ctrl = $scope.$parent;
+					a[obj] = {
+						"__comments" : "New title",
+						optins : [],
+						left: 0,
+						top: 0
+						
+					};
+					ctrl.addChange(null, obj, "Added new module, mdata = " + obj);
+					$timeout(function() {
+						setDraggable();
+					}, 100);
+				};
+			}
+		};
+		 	
 	});
 	
 	app.directive("editName", function() {
@@ -174,6 +195,9 @@
 				
 			},
 			controller : function($scope, $timeout) {
+				
+				var ctrl = $scope.$parent;
+				
 				$scope.view = {
 					editableValue : $scope.value,
 					editableKey : $scope.key, 
@@ -184,66 +208,36 @@
 				$scope.namePrompt = function() {
 					var val = $scope.value;
 					var name = prompt('What would you like to rename this?', val);
-					if(!name) return;
+					if(!name || name === val) return;
+					ctrl.addChange(null, null, "Renamed " + val + " to " + name);
 					$scope.value = name;
 					$scope.view.editableValue = name;
 
 				};
 				
 				$scope.mdataPrompt = function() {
-					// console.log($scope);
-					// console.log($scope.$parent.$parent.campaignTips);
+					
 					var val = $scope.key;
-					// console.log($scope.$parent);
+					var parent = $scope.$parent.$parent; 
+					
 					var mdata = prompt('What would you like to change the mdata to?', val);
-					if(!mdata || $scope.$parent.$parent.campaignTips[mdata]) return;
+					if(!mdata || parent.campaignTips[mdata]) return;
 					else if(mdata === val) return;
-					// $scope.$parent.$parent.campaignTips.replace(val, mdata);
-					$scope.$parent.$parent.campaignTips[mdata] = $scope.$parent.$parent.campaignTips[val];
-					delete $scope.$parent.$parent.campaignTips[val];
+					ctrl.addChange(null, null, "Changed mdata " + val + " to " + mdata);
+					parent.campaignTips[mdata] = parent.campaignTips[val];
+					delete parent.campaignTips[val];
 					$scope.key = mdata;
 					$scope.view.editableKey = mdata;
 					$timeout(function() {
 						setDraggable();
 					}, 100);
+					$scope.$parent.setPositions();			//Reposition so that no modules move off the screen
 				};
 				
 				
 				
 			}
 		};	
-	});
-
-	app.directive("addNewModule", function() {
-		var addTemplate = '<button class="btn" ng-click="add()">New Campaign</button>';
-		
-		return {
-			restrict : "A",
-			replace : true,
-			template : addTemplate,
-			scope : {
-				value : "=addNewModule"
-			},
-			controller : function($scope, $timeout) {
-				$scope.add = function() {
-					var obj = prompt('What is the mdata for the new campaign?');
-					console.log($scope.$parent.campaignTips[obj]);
-					if(!obj || $scope.$parent.campaignTips[obj] !== undefined) return;
-					var a = $scope.$parent.campaignTips;
-					a[obj] = {
-						"__comments" : "New title",
-						optins : [],
-						left: 0,
-						top: 0
-						
-					};
-					$timeout(function() {
-						setDraggable();
-					}, 100);
-				};
-			}
-		};
-		 	
 	});
 	
 	app.directive("removeModule", function() {
@@ -259,8 +253,13 @@
 			},
 			controller : function($scope) {
 				$scope.remove = function(id) {
+					
+					var ctrl = $scope.$parent;
+					var name = $scope.$parent.campaignTips[id].__comments;
+					// console.log($scope.$parent.campaignTips[id]);
 					var check = confirm("Are you sure you want to delete this campaign?");
 					if(check) delete $scope.$parent.campaignTips[id];
+					ctrl.addChange(null, null, "Deleted module " + id + " - " + name);
 				};
 			}
 		};
@@ -299,9 +298,22 @@
 		
 		$scope.changes = "";
 		
-		$scope.addChange = function(location, message) {
-			$scope.changes += "In " + location + ", " + message + "\n";
+		$scope.addChange = function(location, mdata, message) {
+			var res;
+			if(location === null) {
+				res = message + "\n";
+			}
+			else {
+				res = "In " + location + "(mdata=" + mdata + "), " + message + "\n";
+			}
+			$scope.changes += res;
 			console.log($scope.changes);
+		};
+		
+		$scope.save = function(model) {
+			saveFile(config, $scope.changes);
+			$scope.edited = false;
+					
 		};
 		
 		$scope.sortId = function(campaign) {
@@ -328,17 +340,6 @@
 			// console.log($scope.campaignTips);
 		};
 		
-		$scope.test = {
-			"a" : {
-				"name" : "Mal",
-				"sort" : 2
-			},
-			"b" : {
-				"name" : "Wash",
-				"sort" : 1
-			}
-		};
-		
 	});
 	
 
@@ -348,7 +349,7 @@
 	});
 
 
-	function saveFile(model) {
+	function saveFile(model, log) {
 		// startCompare(origin, model);
 		// console.log($.diff(origin, model));
 		// return;
@@ -359,13 +360,20 @@
 		} else {
 			var destination = 'routing-config.json';
 		}
-
+		
+		
+		if(!log) log = "";
+		
 		$.post('upd', {
 			destination : destination,
-			file : model
+			file : model,
+			log : log
 		}, function(data) {
 			console.log(data);
 		});
+		
+		
+		
 	}
 	
 	// function compare(original, updated) {
@@ -383,7 +391,7 @@
 	
 	function setDraggable() {
 		$('.modules').draggable({
-			containment: 'parent',
+			// containment: 'parent',
 			stack : ".modules",
 		});
 		

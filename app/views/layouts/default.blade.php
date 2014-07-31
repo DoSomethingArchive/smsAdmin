@@ -155,7 +155,7 @@
 			}
 			
 			#moduleHolder {
-				border: 1px solid black;
+				/*border: 1px solid black;*/
 			}
 			
 			.hide {
@@ -175,6 +175,10 @@
 			.sectionHeader {
 				background: black;
 				text-align: center;
+			}
+			
+			.center {
+				text-align:center;
 			}
 
 			
