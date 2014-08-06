@@ -1,9 +1,9 @@
 	app = angular.module("codeModel", ['ngAnimate']);
 	
+	//Toggle editing mode for an opt in code
+	app.directive("editCode", function() {
 
-	app.directive("clickToEdit", function() {
-
-		var editorTemplate = '<span class="click-to-edit">' +
+		var editorTemplate = '<span class="edit-code">' +
 								'<span ng-hide="view.editorEnabled" ng-click="enableEditor()">' + '  {{value}} ' + '</span>' + 
 								'<span ng-show="view.editorEnabled">' + '<input ng-model="view.editableValue">' + 
 									'<span ng-click="saveCode(index)" class="mega-octicon octicon-check med-icon button fade"></span>' + 
@@ -17,7 +17,7 @@
 			replace : true,
 			template : editorTemplate,
 			scope : {
-				value : "=clickToEdit",
+				value : "=editCode",
 				index : '@'
 			},
 			controller : function($scope) {
@@ -97,17 +97,18 @@
 			}
 		};
 	});
+	
+	//Add a new code to the current module/campaign
+	app.directive("addNewCode", function() {
 
-	app.directive("addNewItem", function() {
-
-		var addTemplate = '<span class="mega-octicon octicon-plus med-icon button addButton add-new-item" ng-click="add()" ></span>';
+		var addTemplate = '<span class="mega-octicon octicon-plus med-icon button addButton add-new-code" ng-click="add()" ></span>';
 
 		return {
 			restrict : "A",
 			replace : true,
 			template : addTemplate,
 			scope : {
-				value : "=addNewItem",
+				value : "=addNewCode",
 			},
 			controller : function($scope) {
 
@@ -143,7 +144,7 @@
 	});
 	
 	
-
+	//Add new module
 	app.directive("addNewModule", function() {
 		var addTemplate = '<button class="btn" ng-click="add()">New Campaign</button>';
 		
@@ -167,6 +168,7 @@
 						top: 0
 						
 					};
+					ctrl.edited = true;
 					ctrl.addChange(null, obj, "Added new module, mdata = " + obj);
 					$timeout(function() {
 						setDraggable();
@@ -177,6 +179,7 @@
 		 	
 	});
 	
+	//Edit campaign name or mdata
 	app.directive("editName", function() {
 
 		var otherTemplate = '<span class="editName">' +
@@ -240,6 +243,7 @@
 		};	
 	});
 	
+	//Delete module
 	app.directive("removeModule", function() {
 		var template = '<span class="octicon octicon-trashcan button fade right" ng-click="remove(key)"></span>';
 		
@@ -266,7 +270,7 @@
 		
 	});
 	
-	
+	//Track module's change in position
 	app.directive('draggable', function () {
 		return {
 			restrict: 'A',
@@ -337,7 +341,7 @@
 				
 			});
 			
-			// console.log($scope.campaignTips);
+			
 		};
 		
 	});
@@ -350,11 +354,7 @@
 
 
 	function saveFile(model, log) {
-		// startCompare(origin, model);
-		// console.log($.diff(origin, model));
-		// return;
-		// compare(origin, model);
-		// return;
+
 		if (model.tips) {
 			var destination = 'tips-config.json';
 		} else {
@@ -376,14 +376,6 @@
 		
 	}
 	
-	// function compare(original, updated) {
-		// angular.forEach(original, function(i,v) {
-			// console.log(i + ', ' + v);
-		// });
-// 		
-		// // console.log(original);
-		// // console.log(updated);
-	// }
 	
 	/**
 	 * Use JQuery to keep track of the stacking and containment

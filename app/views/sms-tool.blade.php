@@ -12,7 +12,6 @@
 	var startCampaignTransitions = routing.startCampaignTransitions;
 	var yesNoPaths = routing.yesNoPaths;
 	
-	var origin = JSON.parse(JSON.stringify(config));
 
 
 
@@ -26,7 +25,6 @@
 <div ng-controller="MainCtrl" id="moduleHolder">
 	
 	<div class="center">
-		<!-- <button ng-show="edited" onclick="saveFile(config)" class="btn">Save</button> -->
 		<button class="btn" ng-click="setPositions()">Reposition</button>
 		<button ng-show="edited" ng-click="save(config)" class="btn">Save</button>
 	</div>
@@ -44,14 +42,8 @@
 		<div ng-repeat="key in tip.optins track by $index" ng-init="code = tip.optins[key]">
 
 			<input class="write" ng-model="key" />
-			<span class="button" click-to-edit="key" index="{{$index}}"></span>
-		</div><span class="mega-octicon octicon-plus med-icon button addButton fade" add-new-item="tip"></span>
-		<br />
-		<div class="autoMargin">
-			<!-- <button onclick="saveFile(config)" class="hide">Update Database</button> -->
-			<!-- <span update-db="update"></span> -->
-			
-		</div>
+			<span class="button" edit-code="key" index="{{$index}}"></span>
+		</div><span class="mega-octicon octicon-plus med-icon button addButton fade" add-new-code="tip"></span>
 		</td>
 	</tr>
 </table>
@@ -60,18 +52,9 @@
 	<button add-new-module=""></button>
 </div>
 
-<div style="clear: both;">
-	<button onclick="saveFile(config)">
-		Save
-	</button>
-</div>
-
-<div id="results">
-	
-</div>
 
 </div>
-
+<!-- 
 <table ng-controller="MainCtrl">
 	<tr >
 		<th ng-repeat="tip in yesNoPaths"> {{tip.__comments}} </th>
@@ -81,8 +64,8 @@
 		<div ng-repeat="(key, code) in tip" ng-hide="$first">
 			<strong>{{ key }}</strong>:
 			<input type="text" ng-model="code" class="write" />
-			<span class="button" click-to-edit="code" key="key" index="{{key}}"></span>
-		</div><span class="mega-octicon octicon-plus med-icon button addButton" add-new-item="tip"></span>
+			<span class="button" edit-code="code" key="key" index="{{key}}"></span>
+		</div><span class="mega-octicon octicon-plus med-icon button addButton" add-new-code="tip"></span>
 		
 		</td>
 	</tr>
@@ -103,8 +86,8 @@
 		<div ng-repeat="(key, code) in tip" ng-hide="$first">
 			<strong>{{ key }}</strong>:
 			<input type="text" ng-model="code" class="write" />
-			<span class="button" click-to-edit="code" key="key" index="{{key}}"></span>
-		</div><span class="mega-octicon octicon-plus med-icon button addButton" add-new-item="tip"></span></td>
+			<span class="button" edit-code="code" key="key" index="{{key}}"></span>
+		</div><span class="mega-octicon octicon-plus med-icon button addButton" add-new-code="tip"></span></td>
 	</tr>
 </table>
 
@@ -112,8 +95,7 @@
 	<button onclick="saveFile(routing)">
 		Save
 	</button>
-</div>
-
+</div> -->
 
 </main>
 
