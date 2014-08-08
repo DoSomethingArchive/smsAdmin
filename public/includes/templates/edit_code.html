@@ -1,0 +1,11 @@
+<span class="edit-code"> 
+	<span ng-hide="view.editorEnabled" ng-click="enableEditor()">{{value}}</span> 
+<span ng-show="view.editorEnabled">
+<input ng-model="view.editableValue">
+<span ng-click="saveCode(index)" class="mega-octicon octicon-check med-icon button fade"></span> 
+<span ng-click="disableEditor()" class="mega-octicon octicon-remove-close med-icon button cancel fade">
+	
+</span> 
+</span> 
+<span class="octicon octicon-trashcan button fade right" ng-click="remove(index)"></span>
+ </span>
