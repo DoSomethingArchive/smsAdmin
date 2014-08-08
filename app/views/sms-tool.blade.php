@@ -22,7 +22,7 @@
 
 
 
-<div ng-controller="MainCtrl" id="moduleHolder">
+<div ng-controller="MainCtrl" class="moduleHolder">
 	
 	<div class="center">
 		<button class="btn" ng-click="setPositions()">Reposition</button>
@@ -54,14 +54,17 @@
 
 
 </div>
-<!-- 
-<table ng-controller="MainCtrl">
+<hr />
+<div ng-controller="MainCtrl" class="moduleHolder">
+	
+	
+<table ng-repeat="tip in yesNoPaths" class="modules" draggable ng-style="{left: tip.left, top: tip.top}" xpos="tip.left" ypos="tip.top">
 	<tr >
-		<th ng-repeat="tip in yesNoPaths"> {{tip.__comments}} </th>
+		<th> {{tip.__comments}} </th>
 	</tr>
 	<tr >
-		<td ng-repeat="tip in yesNoPaths">
-		<div ng-repeat="(key, code) in tip" ng-hide="$first">
+		<td >
+		<div ng-repeat="(key, code) in tip" ng-if="key !== '__comments' && key !== 'top' && key !== 'left'">
 			<strong>{{ key }}</strong>:
 			<input type="text" ng-model="code" class="write" />
 			<span class="button" edit-code="code" key="key" index="{{key}}"></span>
@@ -70,32 +73,30 @@
 		</td>
 	</tr>
 </table>
-<div>
-	<button onclick="saveFile(routing)">
+</div>
+<button onclick="saveFile(routing)">
 		Save
 	</button>
-</div>
-
-
-<table ng-controller="MainCtrl">
+<div ng-controller="MainCtrl" class="moduleHolder">
+<table ng-repeat="tip in startCampaignTransitions" class="modules" draggable ng-style="{left: tip.left, top: tip.top}" xpos="tip.left" ypos="tip.top">
 	<tr >
-		<th ng-repeat="tip in startCampaignTransitions"> {{tip.__comments}} </th>
+		<th > {{tip.__comments}} </th>
 	</tr>
 	<tr >
-		<td ng-repeat="tip in startCampaignTransitions">
-		<div ng-repeat="(key, code) in tip" ng-hide="$first">
+		<td>
+		<div ng-repeat="(key, code) in tip" ng-if="key !== '__comments' && key !== 'top' && key !== 'left'">
 			<strong>{{ key }}</strong>:
 			<input type="text" ng-model="code" class="write" />
 			<span class="button" edit-code="code" key="key" index="{{key}}"></span>
 		</div><span class="mega-octicon octicon-plus med-icon button addButton" add-new-code="tip"></span></td>
 	</tr>
 </table>
+</div>
 
-<div>
-	<button onclick="saveFile(routing)">
-		Save
-	</button>
-</div> -->
+<div style="padding-bottom: 500px;">
+	
+</div>
+
 
 </main>
 

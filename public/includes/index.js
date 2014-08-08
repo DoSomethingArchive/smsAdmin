@@ -1,94 +1,98 @@
 	app = angular.module("codeModel", ['ngAnimate']);
 	
-	//Toggle editing mode for an opt in code
+	//Toggle editing mode for an opt in code (show/hide input box and save/cancel buttons)
 	app.directive("editCode", function() {
 
-		var editorTemplate = '<span class="edit-code">' +
-								'<span ng-hide="view.editorEnabled" ng-click="enableEditor()">' + '  {{value}} ' + '</span>' + 
-								'<span ng-show="view.editorEnabled">' + '<input ng-model="view.editableValue">' + 
-									'<span ng-click="saveCode(index)" class="mega-octicon octicon-check med-icon button fade"></span>' + 
-									'<span ng-click="disableEditor()" class="mega-octicon octicon-remove-close med-icon button cancel fade"></span>' + 
-								'</span>' +
-								'<span class="octicon octicon-trashcan button fade right" ng-click="remove(index)"></span>' +
-							'</span>';
-
+		
+		editUrl = 'includes/templates/edit_code.html';
+		
 		return {
-			restrict : "A",
+			//If replace is true, then angular will replace the matched element with the template 
+			//ie. if a <span> had an edit-code directive attached to it, it will be replaced by the template
 			replace : true,
-			template : editorTemplate,
+			templateUrl : editUrl,
+			//Use an isolated scope to bind to the parent value and index
+			//See here for the docs on isolated scope: https://docs.angularjs.org/guide/directive#isolating-the-scope-of-a-directive
+			//This is also a good explanation of the isolated scope: http://onehungrymind.com/angularjs-sticky-notes-pt-2-isolated-scope/
 			scope : {
+				//Bind inner scope variable 'value' to the parents editCode
 				value : "=editCode",
+				//'@' sets up a one-way bind from the parent to inner scope. 
 				index : '@'
 			},
 			controller : function($scope) {
-				// $scope.$parent.$parent.$parent.edited = false;
-				
+				//Bind the display and input box values and default to non-editable
 				$scope.view = {
 					editableValue : $scope.value,
 					editorEnabled : false
 				};
-
+				//Show input box to allow editing of codes
 				$scope.enableEditor = function() {
 					$scope.view.editorEnabled = true;
 					$scope.view.editableValue = $scope.value;
 				};
-
-				$scope.disableEditor = function() {//Close editor without saving changes
+				
+				//Close editor without saving changes
+				$scope.disableEditor = function() {
 					$scope.view.editorEnabled = false;
 				};
 				
 				
-				var tip = $scope.$parent.$parent.tip;					//I couldn't figure out a better way to access the collection that the scope is in
-																		//than to rise up 2 levels and manually drop into the appropriate collection
+				//tip is the current campaign
+				var tip = $scope.$parent.$parent.tip;
+				//ctrl gets the scope of the main controller
 				var ctrl = $scope.$parent;
-				var a = tip.__comments;
 				
-				
-				$scope.saveCode = function(index) {//Save changes if input can be parsed as a number
-					var val = parseInt($scope.view.editableValue);
-					if (isNaN(val)) {
+				//Save new code if input can be parsed as a number
+				$scope.saveCode = function(index) {
+					var input = parseInt($scope.view.editableValue);
+					if (isNaN(input)) {
 						alert('Code should be a number');
 						return false;
 					}
-					$scope.value = val;
-
+					$scope.value = input;
 					$scope.disableEditor();
 					
-					
+					//Model is the array type used by optcodes
 					if (tip.optins) {			
-						// console.log($scope.$parent.$parent.key);										
-						if(tip.optins[index] === val) return; //Value didn't change so no need to show button 
-						ctrl.addChange(tip.__comments, $scope.$parent.$parent.key,  "changed " + tip.optins[index] + " to " + val);
-						tip.optins[index] = val;
+						//Value didn't change so no need to show button
+						if(tip.optins[index] === input) return;  
+						//Log change. addChange(Campaign name, campaign mdata, message)
+						ctrl.addChange(tip.__comments, $scope.$parent.$parent.key,  "changed " + tip.optins[index] + " to " + input);
+						//Update model
+						tip.optins[index] = input;
 
-					} else {
-						console.log($scope.$parent.$parent);
-						if(tip[index] === val) return; //Value didn't change so no need to show button
-						ctrl.addChange(tip.__comments, $scope.$parent.$parent.key,  "changed " + tip[index] + " to " + val);
-						tip[index] = val;
+					} 
+					//Model is the object type used by routing
+					else {
+						//Value didn't change so no need to show button
+						if(tip[index] === input) return; 
+						//Log change
+						ctrl.addChange(tip.__comments, $scope.$parent.$parent.key,  "changed " + tip[index] + " to " + input);
+						//Update model
+						tip[index] = input;
 					}
-					
+					//An edit has been made so show Save button
 					$scope.$parent.$parent.$parent.edited = true;
 					
-					// console.log($scope.$parent.$parent);
-					// console.log($scope.$parent.$parent.$parent);
 					
 				};
-				
-				
-				
+				//Delete code
 				$scope.remove = function(index) {
-
+					//Set variable to keep track of what was deleted
 					var del;
 					if (tip.optins) {
-						del = tip.optins[index]; 	
+						del = tip.optins[index];
+						//remove it from array 	
 						tip.optins.splice(index, 1);
 					} else {
 						del = index + ": " + tip[index];
+						//delete object property
 						delete tip[index];
 					}
-					// console.log($scope.$parent.$parent);
+					
 					ctrl.addChange(tip.__comments, ctrl.$parent.key,  "deleted " + del);
+					
 					$scope.$parent.$parent.$parent.edited = true;
 
 
@@ -104,38 +108,44 @@
 		var addTemplate = '<span class="mega-octicon octicon-plus med-icon button addButton add-new-code" ng-click="add()" ></span>';
 
 		return {
-			restrict : "A",
+			//Replace matched element with template
 			replace : true,
 			template : addTemplate,
 			scope : {
+				//Bind inner scope to parents addNewCode
 				value : "=addNewCode",
 			},
 			controller : function($scope) {
-
+				
 				$scope.add = function() {
-					
-					
-					
+					//Keep track of what change
 					var added;
+					//Access main controller
 					var ctrl = $scope.$parent;
+					//tip is current campaign
 					var tip = $scope.$parent.tip;
-					// console.log($scope.$parent.$parent);
 					var obj = $scope.value;
-					if (obj.optins) {							//Check if the object is the array type used by tips
+					//Check if the object is the array type used by tips
+					if (obj.optins) {							
 						var arr = obj.optins;
-						// console.log(arr.length);
+						//Insert 0 at next index
 						arr[arr.length] = 0;
 						added = "added 0";
 						
-					} else {//object is a real object
+					} 
+					//object is a real object
+					else {
 						var keyname = prompt("What should the property name be?");
-						if (!keyname)	//User didn't input a property name so cancel operation
+						//User didn't input a property name so cancel operation
+						if (!keyname)	
 							return;
+						//Create new key with entered name and set its value to 0
 						obj[keyname] = 0;
 						added = "added " + keyname + " = 0";
 					}
+					//Log change
 					ctrl.addChange(tip.__comments, ctrl.key,  added);
-					// console.log($scope.$parent);
+					
 					$scope.$parent.$parent.edited = true;
 
 				};
@@ -144,12 +154,12 @@
 	});
 	
 	
-	//Add new module
+	//Add new module/campaign
 	app.directive("addNewModule", function() {
 		var addTemplate = '<button class="btn" ng-click="add()">New Campaign</button>';
 		
 		return {
-			restrict : "A",
+			// restrict : "A",
 			replace : true,
 			template : addTemplate,
 			scope : {
@@ -158,10 +168,14 @@
 			controller : function($scope, $timeout) {
 				$scope.add = function() {
 					var obj = prompt('What is the mdata for the new campaign?');
+					//User canceled operation or didn't enter an mdata so return
 					if(!obj || $scope.$parent.campaignTips[obj] !== undefined) return;
-					var a = $scope.$parent.campaignTips;
+					
+					var tips = $scope.$parent.campaignTips;
+					//Access main controller
 					var ctrl = $scope.$parent;
-					a[obj] = {
+					//Create new campaign object
+					tips[obj] = {
 						"__comments" : "New title",
 						optins : [],
 						left: 0,
@@ -170,6 +184,8 @@
 					};
 					ctrl.edited = true;
 					ctrl.addChange(null, obj, "Added new module, mdata = " + obj);
+					//Re-set draggable so that the new module is draggable
+					//Time delay was necessary because otherwise the draggable wouldn't be applied
 					$timeout(function() {
 						setDraggable();
 					}, 100);
@@ -189,11 +205,12 @@
 								
 								
 		return {
-			restrict : "A",
+			// restrict : "A",
 			replace : true,
 			template : otherTemplate,
 			scope : {
 				value : "=editName",
+				//mdata is the key
 				key : "=key"
 				
 			},
@@ -207,30 +224,35 @@
 					editorEnabled : false
 				};
 
-				
+				//Change the name of the campaign
 				$scope.namePrompt = function() {
-					var val = $scope.value;
-					var name = prompt('What would you like to rename this?', val);
-					if(!name || name === val) return;
-					ctrl.addChange(null, null, "Renamed " + val + " to " + name);
-					$scope.value = name;
-					$scope.view.editableValue = name;
+					var current = $scope.value;
+					var newname = prompt('What would you like to rename this?', current);
+					//User canceled or didn't change the name, so return
+					if(!newname || newname === current) return;
+					//Log change
+					ctrl.addChange(null, null, "Renamed " + current + " to " + newname);
+					$scope.value = newname;
+					$scope.view.editableValue = newname;
 
 				};
 				
+				//Change the mdata of the campaign
+				//A bit more complicated than renaming because the the mdata's are the keys
+				
 				$scope.mdataPrompt = function() {
 					
-					var val = $scope.key;
+					var current = $scope.key;
 					var parent = $scope.$parent.$parent; 
 					
-					var mdata = prompt('What would you like to change the mdata to?', val);
-					if(!mdata || parent.campaignTips[mdata]) return;
-					else if(mdata === val) return;
-					ctrl.addChange(null, null, "Changed mdata " + val + " to " + mdata);
-					parent.campaignTips[mdata] = parent.campaignTips[val];
-					delete parent.campaignTips[val];
-					$scope.key = mdata;
-					$scope.view.editableKey = mdata;
+					var newMdata = prompt('What would you like to change the mdata to?', current);
+					if(!newMdata || parent.campaignTips[newMdata]) return;
+					else if(newMdata === current) return;
+					ctrl.addChange(null, null, "Changed mdata " + current + " to " + newMdata);
+					parent.campaignTips[newMdata] = parent.campaignTips[current];
+					delete parent.campaignTips[current];
+					$scope.key = newMdata;
+					$scope.view.editableKey = newMdata;
 					$timeout(function() {
 						setDraggable();
 					}, 100);
@@ -243,24 +265,26 @@
 		};	
 	});
 	
-	//Delete module
+	//Delete module/campaign
 	app.directive("removeModule", function() {
 		var template = '<span class="octicon octicon-trashcan button fade right" ng-click="remove(key)"></span>';
 		
 		return {
-			restrict : "A",
+			// restrict : "A",
 			replace : true,
 			template : template,
 			scope : {
 				value : "=removeModule",
+				//mdata is the key
 				key : '='
 			},
 			controller : function($scope) {
 				$scope.remove = function(id) {
-					
+					//Get the main controller
 					var ctrl = $scope.$parent;
+					//Get the name of the campaign being deleted for logging
 					var name = $scope.$parent.campaignTips[id].__comments;
-					// console.log($scope.$parent.campaignTips[id]);
+					//Confirm that the user actually wants to delete the campaign
 					var check = confirm("Are you sure you want to delete this campaign?");
 					if(check) delete $scope.$parent.campaignTips[id];
 					ctrl.addChange(null, null, "Deleted module " + id + " - " + name);
@@ -273,7 +297,7 @@
 	//Track module's change in position
 	app.directive('draggable', function () {
 		return {
-			restrict: 'A',
+			// restrict: 'A',
 			scope: { xpos: '=', ypos: '=' },
 			link: function (scope, element, attrs) {
 				element.draggable({
@@ -294,11 +318,12 @@
 	app.controller("MainCtrl", function($scope) {
 		
 		
-		
+		//Routing paths
 		$scope.startCampaignTransitions = startCampaignTransitions;
 		$scope.yesNoPaths = yesNoPaths;
-
+		//Optcode path
 		$scope.campaignTips = campaignTips;
+		//Variable to keep track of changes. 
 		
 		$scope.changes = "";
 		
