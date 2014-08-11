@@ -16,3 +16,10 @@ Any libraries to be leveraged can be added to [public/requirements](public/requi
 
 ###Points to note
 Since both angular and [Blade](http://laravel.com/docs/templates#blade-templating) use the double brace `{{}}` for outputting expressions by default, the Blade default has been overwritten in [routes.php](app/routes.php) to use `</%` and `<%%` instead.
+
+
+##How to develop locally
+
+1.  [Install Laravel](http://laravel.com/docs/installation) and create a new laravel project. Requirements are PHP 5.4+ and MCrypt.
+2.  Clone the repo, then move the cloned files into the Laravel project (`cp -al source/* dest/ && rm -r source/*`)
+3.  That's it! Spin up your server and try it out
