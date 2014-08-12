@@ -22,7 +22,7 @@ Since both angular and [Blade](http://laravel.com/docs/templates#blade-templatin
 
 1.  [Install Laravel](http://laravel.com/docs/installation) and create a new laravel project. Requirements are PHP 5.4 or greater.
   - If MCrypt is installed, you can create the project anywhere and use Laravel's built in server, `php artisan serve`. Otherwise create the project wherever your php projects normally go (htdocs in MAMP, htdocs/mysites in XAMPP, etc.).
-2.  Clone the repo, then move the cloned files into the Laravel project (`cp -al source/* dest/ && rm -r source/*`)
+2.  Clone the repo, then move the cloned files into the Laravel project (`cp -al source/* dest/ && rm -r source`)
 3.  Get the necessary .json files (currently `tips-config.json` and `routing-config.json`) from here: [mdata-responder](https://github.com/DoSomething/ds-mdata-responder/tree/master/app/config).
 4.  That's it! Spin up your server and try it out
 
