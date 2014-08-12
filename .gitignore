@@ -13,3 +13,4 @@ phpunit.xml
 bootstrap
 app/views/calendar.blade.php
 app/views/sms.blade.php
+public/requirements/Proxima Nova

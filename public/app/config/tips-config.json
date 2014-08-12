@@ -1,0 +1,63 @@
+{  
+   "modelName":"Tip",
+   "tips":{  
+      "10314":{  
+         "__comments":"Pregnancy Text 2015",
+         "optins":[  
+            12345,
+            11234
+         ],
+         "left":0,
+         "top":0
+      },
+      "10413":{  
+         "__comments":"Comeback Clothes 2014 - Poster",
+         "name":"comebackclothes2014-poster",
+         "optins":[  
+            16615,
+            19345,
+            31235
+         ],
+         "top":0,
+         "left":0
+      },
+      "10673":{  
+         "__comments":"Thumb Wars 2014 - KNOW tips.",
+         "name":"thumbwars2014-know",
+         "optins":[  
+            167269,
+            167271,
+            123456
+         ],
+         "top":-10.609375,
+         "left":303.390625
+      },
+      "11151":{  
+         "__comments":"Pregnancy Text - RIGHTS",
+         "name":"pregtext2014-rights",
+         "optins":[  
+            165671,
+            165673,
+            165675,
+            165677
+         ],
+         "left":-310.609375,
+         "top":18.390625
+      },
+      "15742":{  
+         "__comments":"Pregnancy Text - WAIT",
+         "name":"pregtext2014-wait",
+         "optins":[  
+            165699,
+            165707,
+            165711,
+            165713,
+            165715,
+            165717,
+            165719
+         ],
+         "top":-4.609375,
+         "left":90.390625
+      }
+   }
+}

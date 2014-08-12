@@ -5,8 +5,8 @@
 <script>
 	
 	//Get the json config files and make them more manageable to reference
-	var config =       <% file_get_contents('ds/lib/ds/tips-config.json') %>;
-	var routing =       <% file_get_contents('ds/lib/ds/routing-config.json') %>;
+	var config =       <% file_get_contents('app/config/tips-config.json') %>;
+	var routing =       <% file_get_contents('app/config/routing-config.json') %>;
 
 	var campaignTips = config.tips;
 	var startCampaignTransitions = routing.startCampaignTransitions;
