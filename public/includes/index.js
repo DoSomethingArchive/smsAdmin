@@ -68,8 +68,6 @@
 						tip[index] = val;
 					}
 					
-					$scope.$parent.$parent.$parent.edited = true;
-					
 					// console.log($scope.$parent.$parent);
 					// console.log($scope.$parent.$parent.$parent);
 					
@@ -89,7 +87,6 @@
 					}
 					// console.log($scope.$parent.$parent);
 					ctrl.addChange(tip.__comments, ctrl.$parent.key,  "deleted " + del);
-					$scope.$parent.$parent.$parent.edited = true;
 
 
 				};
@@ -136,7 +133,6 @@
 					}
 					ctrl.addChange(tip.__comments, ctrl.key,  added);
 					// console.log($scope.$parent);
-					$scope.$parent.$parent.edited = true;
 
 				};
 			}
@@ -168,7 +164,6 @@
 						top: 0
 						
 					};
-					ctrl.edited = true;
 					ctrl.addChange(null, obj, "Added new module, mdata = " + obj);
 					$timeout(function() {
 						setDraggable();
@@ -302,6 +297,7 @@
 		
 		$scope.changes = "";
 		
+		//Keep track of changes and show save button 
 		$scope.addChange = function(location, mdata, message) {
 			var res;
 			if(location === null) {
@@ -312,6 +308,7 @@
 			}
 			$scope.changes += res;
 			console.log($scope.changes);
+			$scope.edited = true;
 		};
 		
 		$scope.save = function(model) {
