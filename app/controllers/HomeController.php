@@ -37,7 +37,7 @@ class HomeController extends BaseController {
 		 file_put_contents($filedestination, json_encode ($file, JSON_NUMERIC_CHECK));
 		 file_put_contents($logdestination, $log, FILE_APPEND);
 		 
-		 return $filedestination;
+		 return 'ok';
 		 
 		 
 		 
