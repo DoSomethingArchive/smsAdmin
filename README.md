@@ -20,19 +20,20 @@ Since both angular and [Blade](http://laravel.com/docs/templates#blade-templatin
 
 ##How to develop locally
 
-1.  [Install Laravel](http://laravel.com/docs/installation) and create a new laravel project. Requirements are PHP 5.4 or greater.
-  - If MCrypt is installed, you can create the project anywhere and use Laravel's built in server, `php artisan serve`. Otherwise create the project wherever your php projects normally go (htdocs in MAMP, htdocs/mysites in XAMPP, etc.).
-2.  Clone the repo, then move the cloned files into the Laravel project (`cp -aL source/* dest/ && rm -r source`)
-3.  Get the necessary .json files (currently `tips-config.json` and `routing-config.json`) from here: [mdata-responder](https://github.com/DoSomething/ds-mdata-responder/tree/master/app/config).
-4.  That's it! Spin up your server and try it out
+1.  Clone the repo into a location of your choice (as long as you can run that location on a php server)
+2.  Get the necessary .json files (currently `tips-config.json` and `routing-config.json`) from here: [mdata-responder](https://github.com/DoSomething/ds-mdata-responder/tree/master/app/config). In the cloned repo, put them in `public/app/config`.
+3.  That's it! Spin up your server and try it out
 
-##How to deploy
+##How to deploy (first time)
 1.  `ssh -p 38383 dosomething@admin.dosomething.org`
 2.  `ssh utility1` (when prompted, enter normal dev pw here)
 3.  Docroot is var/www/smsutils so `cd ../../var/www/smsutils`
-4.  `git clone git@github.com:DoSomething/smsAdmin.git temp`
-5.  `cp -aL temp/* laravel/ && rm -rf temp`
-6.  `sudo chmod -R 777 .` 
+4.  `git clone git@github.com:DoSomething/smsAdmin.git laravel`
+5.  May need `sudo chmod -R 777 .` 
+
+Subsequent deploys:
+1.  Login as before and navigate to the directory `cd ../../var/www/smsutils/laravel
+2.  `git pull`
 
 ##Laravel File Structure
 ![Laravel File Structure](http://laravelbook.com/images/laravel-architecture/laravel-project-structure.png "Laravel File Structure")
