@@ -24,9 +24,11 @@
 
 <div ng-controller="MainCtrl" id="moduleHolder">
 	
+	<div class="sectionHeader">Tips</div>
+	
 	<div class="center">
 		<button class="btn" ng-click="setPositions()">Reposition</button>
-		<button ng-show="edited" ng-click="save(config)" class="btn">Save</button>
+		<button ng-show="edited" ng-click="save('tips')" class="btn">Save</button>
 	</div>
 	
 	
@@ -51,17 +53,24 @@
 <div style="clear: both;">
 	<button add-new-module=""></button>
 </div>
-
-
 </div>
-<!-- 
-<table ng-controller="MainCtrl">
+<div ng-controller="MainCtrl">
+<div>
+	
+	<div class="sectionHeader">Routing</div>
+
+<div class="center">
+		<button class="btn" ng-click="setPositions()">Reposition</button>
+		<button ng-show="edited" ng-click="save('routing')" class="btn">Save</button>
+	</div>
+
+<table ng-repeat="tip in yesNoPaths" class="modules">
 	<tr >
-		<th ng-repeat="tip in yesNoPaths"> {{tip.__comments}} </th>
+		<th > {{tip.__comments}} </th>
 	</tr>
 	<tr >
-		<td ng-repeat="tip in yesNoPaths">
-		<div ng-repeat="(key, code) in tip" ng-hide="$first">
+		<td >
+		<div ng-repeat="(key, code) in tip" ng-if="key !== 'left' && key !== 'top' && key !== '__comments'">
 			<strong>{{ key }}</strong>:
 			<input type="text" ng-model="code" class="write" />
 			<span class="button" edit-code="code" key="key" index="{{key}}"></span>
@@ -70,20 +79,16 @@
 		</td>
 	</tr>
 </table>
-<div>
-	<button onclick="saveFile(routing)">
-		Save
-	</button>
-</div>
 
 
-<table ng-controller="MainCtrl">
+
+<table ng-repeat="tip in startCampaignTransitions" class="modules" >
 	<tr >
-		<th ng-repeat="tip in startCampaignTransitions"> {{tip.__comments}} </th>
+		<th > {{tip.__comments}} </th>
 	</tr>
 	<tr >
-		<td ng-repeat="tip in startCampaignTransitions">
-		<div ng-repeat="(key, code) in tip" ng-hide="$first">
+		<td >
+		<div ng-repeat="(key, code) in tip" ng-if="key !== 'left' && key !== 'top' && key !== '__comments'" >
 			<strong>{{ key }}</strong>:
 			<input type="text" ng-model="code" class="write" />
 			<span class="button" edit-code="code" key="key" index="{{key}}"></span>
@@ -91,12 +96,9 @@
 	</tr>
 </table>
 
-<div>
-	<button onclick="saveFile(routing)">
-		Save
-	</button>
-</div> -->
 
+</div>
+</div>
 </main>
 
 @stop

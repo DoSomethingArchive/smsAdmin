@@ -24,7 +24,7 @@ class HomeController extends BaseController {
 		
 		 date_default_timezone_set("America/New_York");
 		 
-		 $destination = 'ds/lib/ds/';
+		 $destination = 'app/config/';
 		 
 		 $filedestination = $destination . Input::get('destination');
 		 $logdestination = $destination . "updates.log";
@@ -37,7 +37,7 @@ class HomeController extends BaseController {
 		 file_put_contents($filedestination, json_encode ($file, JSON_NUMERIC_CHECK));
 		 file_put_contents($logdestination, $log, FILE_APPEND);
 		 
-		 return $destination;
+		 return $filedestination;
 		 
 		 
 		 

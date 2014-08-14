@@ -312,7 +312,14 @@
 		};
 		
 		$scope.save = function(model) {
-			saveFile(config, $scope.changes);
+			var file;
+			if(model === 'tips') {
+			 	file = config;
+			}	
+			else {
+				file = routing;
+			} 
+			saveFile(file, $scope.changes);
 			$scope.edited = false;
 					
 		};
@@ -322,13 +329,6 @@
 			console.log(a);
 			return a;
 		};
-		
-		$scope.notSorted = function(obj) {		//Display array in the order it's saved, not in Javascript's unhelpful default alphabetic sorting of numbers
-			if (!obj) {							
-				return [];
-			}
-			return Object.keys(obj);
-	};
 		
 		$scope.setPositions = function(){
 			

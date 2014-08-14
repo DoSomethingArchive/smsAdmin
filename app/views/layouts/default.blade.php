@@ -175,10 +175,17 @@
 			.sectionHeader {
 				background: black;
 				text-align: center;
+				color: white;
+				background: #4e2b63;
+				background-image: linear-gradient(rgba(0, 0, 0, 0.85) 20%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.2) 70%, rgba(0, 0, 0, 0) 100%);
 			}
 			
 			.center {
 				text-align:center;
+			}
+			
+			main {
+				padding-bottom: 500px;
 			}
 
 			
