@@ -26,5 +26,13 @@ Since both angular and [Blade](http://laravel.com/docs/templates#blade-templatin
 3.  Get the necessary .json files (currently `tips-config.json` and `routing-config.json`) from here: [mdata-responder](https://github.com/DoSomething/ds-mdata-responder/tree/master/app/config).
 4.  That's it! Spin up your server and try it out
 
+##How to deploy
+1.  `ssh -p 38383 dosomething@admin.dosomething.org`
+2.  `ssh utility1` (when prompted, enter normal dev pw here)
+3.  Docroot is var/www/smsutils so `cd ../../var/www/smsutils`
+4.  `git clone git@github.com:DoSomething/smsAdmin.git temp`
+5.  `cp -aL temp/* laravel/ && rm -rf temp`
+6.  `sudo chmod -R 777 .` 
+
 ##Laravel File Structure
 ![Laravel File Structure](http://laravelbook.com/images/laravel-architecture/laravel-project-structure.png "Laravel File Structure")
