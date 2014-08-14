@@ -1,14 +1,8 @@
 public/packages
-public/favicon.ico
-public/index.php
-public/robots.txt
 vendor
 CONTRIBUTING.md
-readme.md
 server.php
 artisan
-composer.json
-composer.lock
 phpunit.xml
 bootstrap
 app/views/calendar.blade.php
